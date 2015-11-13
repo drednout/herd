@@ -37,13 +37,20 @@ split(Str, WithStr, Acc1, Acc2) ->
 
 
 -spec replace(string(), string(), string()) -> string().
-replace([], _, _) -> "";
-replace(Str, Old, New) ->
+replace(Str, Old, New) -> 
+    OldLen = length(Old),
+    NewStr = replace_(Str, Old, New, OldLen),
+    lists:flatten(NewStr).
+
+
+-spec replace_(string(), string(), string(), integer()) -> string().
+replace_([], _, _, _) -> "";
+replace_(Str, Old, New, OldLen) ->
     case lists:prefix(Old, Str) of
-        true -> Str2 = lists:sublist(Str, length(Old) + 1, length(Str)),
-                New ++ replace(Str2, Old, New);
+        true -> Str2 = lists:sublist(Str, OldLen + 1, length(Str)),
+                [New, replace_(Str2, Old, New, OldLen)];
         false -> [Char | Str2] = Str,
-                 [Char | replace(Str2, Old, New)]
+                 [Char | replace_(Str2, Old, New, OldLen)]
     end.
 
 
