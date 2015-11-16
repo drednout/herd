@@ -35,12 +35,18 @@ split(Str, WithStr, Acc1, Acc2) ->
                  split(Str2, WithStr, [Char | Acc1], Acc2)
     end.
 
-
 -spec replace(string(), string(), string()) -> string().
-replace([], _, _) -> "";
-replace(Str, Old, New) ->
+replace(Str, Old, New) -> 
+    OldLen = length(Old),
+    StrLen = length(Str),
+    replace_(Str, Old, New, OldLen, StrLen).
+
+
+-spec replace_(string(), string(), string(), integer(), integer()) -> string().
+replace_([], _, _, _, _) -> "";
+replace_(Str, Old, New, OldLen, StrLen) ->
     case lists:prefix(Old, Str) of
-        true -> Str2 = lists:sublist(Str, length(Old) + 1, length(Str)),
+        true -> Str2 = lists:sublist(Str, OldLen + 1, StrLen),
                 New ++ replace(Str2, Old, New);
         false -> [Char | Str2] = Str,
                  [Char | replace(Str2, Old, New)]
