@@ -47,9 +47,9 @@ replace_([], _, _, _, _) -> "";
 replace_(Str, Old, New, OldLen, StrLen) ->
     case lists:prefix(Old, Str) of
         true -> Str2 = lists:sublist(Str, OldLen + 1, StrLen),
-                New ++ replace(Str2, Old, New);
+                New ++ replace_(Str2, Old, New, OldLen, StrLen);
         false -> [Char | Str2] = Str,
-                 [Char | replace(Str2, Old, New)]
+                 [Char | replace_(Str2, Old, New, OldLen, StrLen)]
     end.
 
 
